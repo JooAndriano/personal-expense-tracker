@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../app/themes/app_colors.dart';
 import '../../../core/components/buttons/primary_button.dart';
 import '../../../core/components/textfields/app_text_field.dart';
+import '../../../core/utils/category_icon_helper.dart';
 import '../controller/add_expense_controller.dart';
 
 class AddExpenseScreen extends StatelessWidget {
@@ -169,8 +170,33 @@ class AddExpenseScreen extends StatelessWidget {
                               ) {
                             return DropdownMenuItem(
                               value: category,
-                              child: Text(
-                                category,
+                              child: Row(
+                                mainAxisSize:
+                                MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    CategoryIconHelper.getIcon(
+                                      category,
+                                    ),
+                                    size: 20,
+                                    color:
+                                    CategoryIconHelper
+                                        .getColor(
+                                      category,
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 12),
+
+                                  Text(
+                                    category,
+                                    overflow:
+                                    TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           }).toList(),

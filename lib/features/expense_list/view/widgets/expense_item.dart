@@ -6,6 +6,7 @@ import '../../../../app/themes/app_text_styles.dart';
 import '../../../../core/extensions/currency_extension.dart';
 import '../../../../core/extensions/date_extension.dart';
 import '../../../../data/models/expense_model.dart';
+import '../../../../core/utils/category_icon_helper.dart';
 
 class ExpenseItem extends StatelessWidget {
   final ExpenseModel expense;
@@ -70,19 +71,26 @@ class ExpenseItem extends StatelessWidget {
                 height: 56,
                 decoration: BoxDecoration(
                   color:
-                  AppColors.primary
-                      .withValues(
-                    alpha: 0.08,
+                  CategoryIconHelper
+                      .getColor(
+                    expense.category,
+                  ).withValues(
+                    alpha: 0.12,
                   ),
                   borderRadius:
                   BorderRadius.circular(
                     18,
                   ),
                 ),
-                child: const Icon(
-                  Icons.payments_rounded,
+                child: Icon(
+                  CategoryIconHelper.getIcon(
+                    expense.category,
+                  ),
                   color:
-                  AppColors.primary,
+                  CategoryIconHelper
+                      .getColor(
+                    expense.category,
+                  ),
                 ),
               ),
 

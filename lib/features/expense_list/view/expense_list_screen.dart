@@ -7,6 +7,7 @@ import '../../../app/routes/app_routes.dart';
 import '../../../app/themes/app_colors.dart';
 import '../../../app/themes/app_text_styles.dart';
 import '../../../core/extensions/currency_extension.dart';
+import '../../../core/utils/category_icon_helper.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../controller/expense_list_controller.dart';
 import 'widgets/expense_item.dart';
@@ -486,14 +487,32 @@ class ExpenseListScreen extends StatelessWidget {
                                     ) {
                                   return DropdownMenuItem(
                                     value: category,
-                                    child: Text(
-                                      category,
-                                      overflow:
-                                      TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      ),
+                                    child: Row(
+                                      children: [
+                                        if (category != 'All')
+                                          Icon(
+                                            CategoryIconHelper.getIcon(
+                                              category,
+                                            ),
+                                            size: 18,
+                                            color:
+                                            CategoryIconHelper
+                                                .getColor(
+                                              category,
+                                            ),
+                                          ),
+
+                                        if (category != 'All')
+                                          const SizedBox(width: 10),
+
+                                        Expanded(
+                                          child: Text(
+                                            category,
+                                            overflow:
+                                            TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   );
                                 }).toList(),
