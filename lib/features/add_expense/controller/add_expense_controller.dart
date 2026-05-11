@@ -56,6 +56,44 @@ class AddExpenseController extends GetxController {
   }
 
   Future<void> saveExpense() async {
+    final title =
+    titleController.text.trim();
+
+    final amount =
+        int.tryParse(
+          amountController.text.trim(),
+        ) ??
+            0;
+
+    /// VALIDATION
+    if (title.isEmpty) {
+      Get.snackbar(
+        'Validation Error',
+        'Expense title is required',
+        snackPosition:
+        SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(
+          16,
+        ),
+      );
+
+      return;
+    }
+
+    if (amount <= 0) {
+      Get.snackbar(
+        'Validation Error',
+        'Amount must be greater than 0',
+        snackPosition:
+        SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(
+          16,
+        ),
+      );
+
+      return;
+    }
+
     final expenses =
     repository.getExpenses();
 
@@ -65,13 +103,8 @@ class AddExpenseController extends GetxController {
           DateTime.now()
               .millisecondsSinceEpoch
               .toString(),
-      title:
-      titleController.text.trim(),
-      amount:
-      int.tryParse(
-        amountController.text,
-      ) ??
-          0,
+      title: title,
+      amount: amount,
       date: selectedDate.value,
       category:
       selectedCategory.value,
@@ -92,5 +125,17 @@ class AddExpenseController extends GetxController {
     );
 
     Get.back(result: true);
+
+    Get.snackbar(
+      'Success',
+      editingExpense != null
+          ? 'Expense updated successfully'
+          : 'Expense added successfully',
+      snackPosition:
+      SnackPosition.BOTTOM,
+      margin: const EdgeInsets.all(
+        16,
+      ),
+    );
   }
 }

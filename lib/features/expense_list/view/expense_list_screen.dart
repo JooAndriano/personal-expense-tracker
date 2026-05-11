@@ -515,11 +515,162 @@ class ExpenseListScreen extends StatelessWidget {
                           }
                         },
 
-                        onDelete:
-                            () {
-                          controller
-                              .deleteExpense(
-                            expense.id,
+                        onDelete: () {
+                          Get.bottomSheet(
+                            Container(
+                              padding:
+                              const EdgeInsets.all(24),
+                              decoration:
+                              const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                BorderRadius.vertical(
+                                  top: Radius.circular(32),
+                                ),
+                              ),
+                              child: SafeArea(
+                                child: Column(
+                                  mainAxisSize:
+                                  MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration:
+                                      BoxDecoration(
+                                        color: AppColors.danger
+                                            .withValues(
+                                          alpha: 0.1,
+                                        ),
+                                        shape:
+                                        BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.delete_rounded,
+                                        color:
+                                        AppColors.danger,
+                                        size: 28,
+                                      ),
+                                    ),
+
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+
+                                    const Text(
+                                      'Delete Expense?',
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight:
+                                        FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+
+                                    Text(
+                                      'This action cannot be undone.',
+                                      textAlign:
+                                      TextAlign.center,
+                                      style: TextStyle(
+                                        color:
+                                        Colors.grey.shade600,
+                                        height: 1.5,
+                                      ),
+                                    ),
+
+                                    const SizedBox(
+                                      height: 28,
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: OutlinedButton(
+                                            style:
+                                            OutlinedButton.styleFrom(
+                                              minimumSize:
+                                              const Size(
+                                                double.infinity,
+                                                54,
+                                              ),
+                                              shape:
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                  18,
+                                                ),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            child: const Text(
+                                              'Cancel',
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(
+                                          width: 16,
+                                        ),
+
+                                        Expanded(
+                                          child: FilledButton(
+                                            style:
+                                            FilledButton.styleFrom(
+                                              backgroundColor:
+                                              AppColors
+                                                  .danger,
+                                              minimumSize:
+                                              const Size(
+                                                double.infinity,
+                                                54,
+                                              ),
+                                              shape:
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                  18,
+                                                ),
+                                              ),
+                                            ),
+                                            onPressed: () async {
+                                              Get.back();
+
+                                              await controller
+                                                  .deleteExpense(
+                                                expense.id,
+                                              );
+
+                                              Get.snackbar(
+                                                'Deleted',
+                                                'Expense deleted successfully',
+                                                snackPosition:
+                                                SnackPosition
+                                                    .BOTTOM,
+                                                margin:
+                                                const EdgeInsets.all(
+                                                  16,
+                                                ),
+                                              );
+                                            },
+                                            child: const Text(
+                                              'Delete',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            backgroundColor:
+                            Colors.transparent,
+                            isScrollControlled: true,
                           );
                         },
                       );
