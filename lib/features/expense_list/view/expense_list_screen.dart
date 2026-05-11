@@ -10,7 +10,12 @@ import '../../../core/extensions/currency_extension.dart';
 import '../../../core/utils/category_icon_helper.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../controller/expense_list_controller.dart';
-import 'widgets/expense_item.dart';
+import '../../shared/models/expense_filter.dart';
+import 'widgets/expense_search_bar.dart';
+import '../../../core/components/app_scaffold.dart';
+import '../../../core/components/cards/expense_card.dart';
+import '../../../core/components/states/empty_state.dart';
+import '../../../core/components/sheets/delete_confirmation.dart';
 
 class ExpenseListScreen extends StatelessWidget {
   const ExpenseListScreen({super.key});
@@ -25,7 +30,7 @@ class ExpenseListScreen extends StatelessWidget {
       ProfileController(),
     );
 
-    return Scaffold(
+    return AppScaffold(
       backgroundColor:
       AppColors.background,
 
@@ -425,32 +430,8 @@ class ExpenseListScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               /// SEARCH
-              TextField(
-                controller:
-                controller
-                    .searchController,
-                decoration:
-                InputDecoration(
-                  hintText:
-                  'Search expenses...',
-                  prefixIcon:
-                  const Icon(
-                    Icons
-                        .search_rounded,
-                  ),
-                  filled: true,
-                  fillColor:
-                  Colors.white,
-                  border:
-                  OutlineInputBorder(
-                    borderRadius:
-                    BorderRadius.circular(
-                      18,
-                    ),
-                    borderSide:
-                    BorderSide.none,
-                  ),
-                ),
+              ExpenseSearchBar(
+                controller: controller.searchController,
               ),
 
               const SizedBox(height: 16),
@@ -462,7 +443,7 @@ class ExpenseListScreen extends StatelessWidget {
                     child: Obx(
                           () =>
                               DropdownButtonFormField<String>(
-                                value:
+                                initialValue:
                                 controller
                                     .selectedCategory
                                     .value,
@@ -535,7 +516,7 @@ class ExpenseListScreen extends StatelessWidget {
                               DropdownButtonFormField<
                                   ExpenseSortType
                               >(
-                                value:
+                                initialValue:
                                 controller
                                     .selectedSort
                                     .value,
@@ -627,77 +608,12 @@ class ExpenseListScreen extends StatelessWidget {
                                   .value !=
                                   'All';
 
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment:
-                          MainAxisAlignment
-                              .center,
-                          children: [
-                            Container(
-                              width:
-                              84,
-                              height:
-                              84,
-                              decoration:
-                              BoxDecoration(
-                                color: Colors
-                                    .grey
-                                    .shade100,
-                                shape:
-                                BoxShape.circle,
-                              ),
-                              child:
-                              Icon(
-                                Icons
-                                    .receipt_long_rounded,
-                                size:
-                                42,
-                                color: Colors
-                                    .grey
-                                    .shade500,
-                              ),
-                            ),
-
-                            const SizedBox(
-                              height:
-                              24,
-                            ),
-
-                            Text(
-                              isSearching
-                                  ? 'No results found'
-                                  : 'No expenses yet',
-                              style:
-                              const TextStyle(
-                                fontSize:
-                                24,
-                                fontWeight:
-                                FontWeight.w700,
-                              ),
-                            ),
-
-                            const SizedBox(
-                              height:
-                              10,
-                            ),
-
-                            Text(
-                              isSearching
-                                  ? 'Try using another keyword or filter'
-                                  : 'Start tracking your expenses\nby adding your first one',
-                              textAlign:
-                              TextAlign.center,
-                              style:
-                              TextStyle(
-                                color: Colors
-                                    .grey
-                                    .shade600,
-                                height:
-                                1.5,
-                              ),
-                            ),
-                          ],
-                        ),
+                      return EmptyState(
+                        isSearching: isSearching,
+                        titleWhenEmpty: 'No expenses yet',
+                        subtitleWhenEmpty: 'Start tracking your expenses\nby adding your first one',
+                        titleWhenNoResult: 'No results found',
+                        subtitleWhenNoResult: 'Try using another keyword or filter',
                       );
                     }
 
@@ -713,7 +629,7 @@ class ExpenseListScreen extends StatelessWidget {
                         expenses[
                         index];
 
-                        return ExpenseItem(
+                        return ExpenseCard(
                           expense:
                           expense,
                           onEdit:
@@ -735,186 +651,19 @@ class ExpenseListScreen extends StatelessWidget {
                           onDelete:
                               () {
                             Get.bottomSheet(
-                              Container(
-                                padding:
-                                const EdgeInsets.all(
-                                  24,
-                                ),
-                                decoration:
-                                const BoxDecoration(
-                                  color:
-                                  Colors.white,
-                                  borderRadius:
-                                  BorderRadius.vertical(
-                                    top:
-                                    Radius.circular(
-                                      32,
-                                    ),
-                                  ),
-                                ),
-                                child:
-                                SafeArea(
-                                  child:
-                                  Column(
-                                    mainAxisSize:
-                                    MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        width:
-                                        56,
-                                        height:
-                                        56,
-                                        decoration:
-                                        BoxDecoration(
-                                          color:
-                                          AppColors.danger.withValues(
-                                            alpha:
-                                            0.1,
-                                          ),
-                                          shape:
-                                          BoxShape.circle,
-                                        ),
-                                        child:
-                                        const Icon(
-                                          Icons.delete_rounded,
-                                          color:
-                                          AppColors.danger,
-                                          size:
-                                          28,
-                                        ),
-                                      ),
-
-                                      const SizedBox(
-                                        height:
-                                        20,
-                                      ),
-
-                                      const Text(
-                                        'Delete Expense?',
-                                        style:
-                                        TextStyle(
-                                          fontSize:
-                                          22,
-                                          fontWeight:
-                                          FontWeight.bold,
-                                        ),
-                                      ),
-
-                                      const SizedBox(
-                                        height:
-                                        10,
-                                      ),
-
-                                      Text(
-                                        'This action cannot be undone.',
-                                        textAlign:
-                                        TextAlign.center,
-                                        style:
-                                        TextStyle(
-                                          color: Colors
-                                              .grey
-                                              .shade600,
-                                          height:
-                                          1.5,
-                                        ),
-                                      ),
-
-                                      const SizedBox(
-                                        height:
-                                        28,
-                                      ),
-
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child:
-                                            OutlinedButton(
-                                              style:
-                                              OutlinedButton.styleFrom(
-                                                minimumSize:
-                                                const Size(
-                                                  double.infinity,
-                                                  54,
-                                                ),
-                                                shape:
-                                                RoundedRectangleBorder(
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                    18,
-                                                  ),
-                                                ),
-                                              ),
-                                              onPressed:
-                                                  () {
-                                                Get.back();
-                                              },
-                                              child:
-                                              const Text(
-                                                'Cancel',
-                                              ),
-                                            ),
-                                          ),
-
-                                          const SizedBox(
-                                            width:
-                                            16,
-                                          ),
-
-                                          Expanded(
-                                            child:
-                                            FilledButton(
-                                              style:
-                                              FilledButton.styleFrom(
-                                                backgroundColor:
-                                                AppColors.danger,
-                                                minimumSize:
-                                                const Size(
-                                                  double.infinity,
-                                                  54,
-                                                ),
-                                                shape:
-                                                RoundedRectangleBorder(
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                    18,
-                                                  ),
-                                                ),
-                                              ),
-                                              onPressed:
-                                                  () async {
-                                                Get.back();
-
-                                                await controller.deleteExpense(
-                                                  expense.id,
-                                                );
-
-                                                Get.snackbar(
-                                                  'Deleted',
-                                                  'Expense deleted successfully',
-                                                  snackPosition:
-                                                  SnackPosition.BOTTOM,
-                                                  margin:
-                                                  const EdgeInsets.all(
-                                                    16,
-                                                  ),
-                                                );
-                                              },
-                                              child:
-                                              const Text(
-                                                'Delete',
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              DeleteConfirmation(
+                                onConfirm: () async {
+                                  await controller.deleteExpense(expense.id);
+                                  Get.snackbar(
+                                    'Deleted',
+                                    'Expense deleted successfully',
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    margin: const EdgeInsets.all(16),
+                                  );
+                                },
                               ),
-                              backgroundColor:
-                              Colors.transparent,
-                              isScrollControlled:
-                              true,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
                             );
                           },
                         );

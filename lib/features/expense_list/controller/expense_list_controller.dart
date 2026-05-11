@@ -4,13 +4,8 @@ import 'package:get/get.dart';
 import '../../../data/models/expense_model.dart';
 import '../../../data/repositories/expense_repository.dart';
 import '../state/expense_list_state.dart';
-
-enum ExpenseSortType {
-  newest,
-  oldest,
-  highestAmount,
-  lowestAmount,
-}
+import '../../shared/models/expense_filter.dart';
+import '../../shared/enums/expense_category.dart';
 
 class ExpenseListController
     extends GetxController {
@@ -33,11 +28,7 @@ class ExpenseListController
 
   final categories = [
     'All',
-    'Food & Dining',
-    'Transportation',
-    'Shopping',
-    'Bills',
-    'Entertainment',
+    ...ExpenseCategoryHelper.labels,
   ];
 
   @override

@@ -1,30 +1,11 @@
 import 'package:flutter/material.dart';
 
-class EmptyState extends StatelessWidget {
+class ExpenseEmptyState extends StatelessWidget {
   final bool isSearching;
-  final String? titleWhenEmpty;
-  final String? subtitleWhenEmpty;
-  final String? titleWhenNoResult;
-  final String? subtitleWhenNoResult;
-
-  const EmptyState({
-    super.key,
-    required this.isSearching,
-    this.titleWhenEmpty,
-    this.subtitleWhenEmpty,
-    this.titleWhenNoResult,
-    this.subtitleWhenNoResult,
-  });
+  const ExpenseEmptyState({super.key, required this.isSearching});
 
   @override
   Widget build(BuildContext context) {
-    final title = isSearching
-        ? (titleWhenNoResult ?? 'No results found')
-        : (titleWhenEmpty ?? 'No items yet');
-    final subtitle = isSearching
-        ? (subtitleWhenNoResult ?? 'Try using another keyword or filter')
-        : (subtitleWhenEmpty ?? 'Start by adding your first item');
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -44,7 +25,7 @@ class EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            title,
+            isSearching ? 'No results found' : 'No expenses yet',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
@@ -52,7 +33,9 @@ class EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            subtitle,
+            isSearching
+                ? 'Try using another keyword or filter'
+                : 'Start tracking your expenses\nby adding your first one',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.grey.shade600,

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../data/models/expense_model.dart';
 import '../../../data/repositories/expense_repository.dart';
 import '../state/add_expense_state.dart';
+import '../../shared/enums/expense_category.dart';
 
 class AddExpenseController extends GetxController {
   final repository = ExpenseRepository();
@@ -25,13 +26,7 @@ class AddExpenseController extends GetxController {
 
   ExpenseModel? editingExpense;
 
-  final categories = [
-    'Food & Dining',
-    'Transportation',
-    'Shopping',
-    'Bills',
-    'Entertainment',
-  ];
+  final categories = ExpenseCategoryHelper.labels;
 
   @override
   void onInit() {

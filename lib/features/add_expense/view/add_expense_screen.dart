@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-
 import '../../../app/themes/app_colors.dart';
-import '../../../core/components/buttons/primary_button.dart';
-import '../../../core/components/textfields/app_text_field.dart';
-import '../../../core/utils/category_icon_helper.dart';
+import '../../../core/components/app_scaffold.dart';
+import '../../../core/extensions/context_extension.dart';
 import '../controller/add_expense_controller.dart';
+import 'widgets/expense_form.dart';
+import 'widgets/save_expense_button.dart';
 
 class AddExpenseScreen extends StatelessWidget {
   const AddExpenseScreen({super.key});
@@ -17,7 +16,7 @@ class AddExpenseScreen extends StatelessWidget {
       AddExpenseController(),
     );
 
-    return Scaffold(
+    return AppScaffold(
       backgroundColor:
       AppColors.background,
       appBar: AppBar(
@@ -52,251 +51,23 @@ class AddExpenseScreen extends StatelessWidget {
             right: 20,
             top: 20,
             bottom:
-            MediaQuery.of(context)
-                .viewInsets
-                .bottom +
-                20,
+            context.viewInsets.bottom + 20,
           ),
           child: ConstrainedBox(
             constraints: BoxConstraints(
               minHeight:
-              MediaQuery.of(context)
-                  .size
-                  .height -
-                  140,
+              ContextExt(context).height - 140,
             ),
             child: IntrinsicHeight(
               child: Column(
                 crossAxisAlignment:
                 CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Expense Title',
-                    style: TextStyle(
-                      fontWeight:
-                      FontWeight.w600,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  AppTextField(
-                    controller:
-                    controller
-                        .titleController,
-                    hint:
-                    'e.g. Grocery Shopping',
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  const Text(
-                    'Amount',
-                    style: TextStyle(
-                      fontWeight:
-                      FontWeight.w600,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  TextField(
-                    controller:
-                    controller
-                        .amountController,
-                    keyboardType:
-                    TextInputType.number,
-                    decoration:
-                    InputDecoration(
-                      hintText: '0',
-                      prefixText: 'Rp  ',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border:
-                      OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.circular(
-                          18,
-                        ),
-                        borderSide:
-                        BorderSide.none,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  const Text(
-                    'Category',
-                    style: TextStyle(
-                      fontWeight:
-                      FontWeight.w600,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Obx(
-                        () =>
-                        DropdownButtonFormField<
-                            String
-                        >(
-                          value:
-                          controller
-                              .selectedCategory
-                              .value,
-                          decoration:
-                          InputDecoration(
-                            filled: true,
-                            fillColor:
-                            Colors.white,
-                            border:
-                            OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(
-                                18,
-                              ),
-                              borderSide:
-                              BorderSide.none,
-                            ),
-                          ),
-                          icon: const Icon(
-                            Icons
-                                .keyboard_arrow_down_rounded,
-                          ),
-                          items:
-                          controller.categories.map((
-                              category,
-                              ) {
-                            return DropdownMenuItem(
-                              value: category,
-                              child: Row(
-                                mainAxisSize:
-                                MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    CategoryIconHelper.getIcon(
-                                      category,
-                                    ),
-                                    size: 20,
-                                    color:
-                                    CategoryIconHelper
-                                        .getColor(
-                                      category,
-                                    ),
-                                  ),
-
-                                  const SizedBox(width: 12),
-
-                                  Text(
-                                    category,
-                                    overflow:
-                                    TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            controller
-                                .selectedCategory
-                                .value =
-                            value!;
-                          },
-                        ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  const Text(
-                    'Date',
-                    style: TextStyle(
-                      fontWeight:
-                      FontWeight.w600,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Obx(
-                        () => InkWell(
-                      onTap: () async {
-                        final pickedDate =
-                        await showDatePicker(
-                          context: context,
-                          initialDate:
-                          controller
-                              .selectedDate
-                              .value,
-                          firstDate:
-                          DateTime(2020),
-                          lastDate:
-                          DateTime(2100),
-                        );
-
-                        if (pickedDate !=
-                            null) {
-                          controller
-                              .selectedDate
-                              .value =
-                              pickedDate;
-                        }
-                      },
-                      borderRadius:
-                      BorderRadius.circular(
-                        18,
-                      ),
-                      child: Container(
-                        width:
-                        double.infinity,
-                        padding:
-                        const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 18,
-                        ),
-                        decoration:
-                        BoxDecoration(
-                          color:
-                          Colors.white,
-                          borderRadius:
-                          BorderRadius.circular(
-                            18,
-                          ),
-                        ),
-                        child: Text(
-                          DateFormat(
-                            'dd/MM/yyyy',
-                          ).format(
-                            controller
-                                .selectedDate
-                                .value,
-                          ),
-                          style:
-                          const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  ExpenseForm(controller: controller),
 
                   const Spacer(),
 
-                  PrimaryButton(
-                    text:
-                    controller
-                        .editingExpense !=
-                        null
-                        ? 'Save Changes'
-                        : 'Save Expense',
-                    onTap: () {
-                      controller
-                          .saveExpense();
-                    },
-                  ),
+                  SaveExpenseButton(controller: controller),
 
                   const SizedBox(height: 20),
                 ],
